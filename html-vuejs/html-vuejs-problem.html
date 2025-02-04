@@ -12,32 +12,32 @@ Observación: se adjuntan 2 imágenes con el comportamiento visual esperado.
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vue.js Exercise</title>
   <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
 </head>
+
 <body>
   <div id="app">
     <h1>Task List</h1>
-    
+
     <!-- Input para escribir el nombre de la tarea -->
-    <input 
-      type="text" 
-      placeholder="Enter a task" 
-    />
+    <!-- agrego funcionalidad para enlazar con vuejs -->
+    <input type="text" placeholder="Enter a task" v-model="newTask" />
 
     <!-- Botón para agregar tarea -->
-    <button>Add Task</button>
-    
+    <!-- agrego la funcion onclick al botón ya que no lo tenía -->
+    <button v-on:click="addTask">Add Task</button>
+
     <br><br>
 
     <!-- Checkbox para mostrar/ocultar tareas completadas -->
     <label>
-      <input 
-        type="checkbox" 
-      />
+      <!-- agrego v model en el input -->
+      <input type="checkbox" v-model="showCompleted" />
       Show Completed Tasks
     </label>
 
@@ -45,8 +45,9 @@ Observación: se adjuntan 2 imágenes con el comportamiento visual esperado.
       <!-- Mostrar lista de tareas -->
       <li v-for="(task, index) in filteredTasks" :key="index">
         <span>{{ task.name }}</span>
-        <button v-on:click="markComplete(index)">Mark Complete</button>
-        <span style="color: green;">✔ Completed</span>
+        <!-- cambio funcionalidad de boton mark complete y del span -->
+        <button v-if="!task.completed" v-on:click="markComplete(index)">Mark Complete</button>
+        <span v-if="task.completed" style="color: green;">✔ Completed</span>
       </li>
     </ul>
   </div>
@@ -55,28 +56,33 @@ Observación: se adjuntan 2 imágenes con el comportamiento visual esperado.
     new Vue({
       el: "#app",
       data: {
-        newTask: "",         
-        tasks: [],           
-        showCompleted: true, 
+        newTask: "",
+        tasks: [],
+        showCompleted: true,
       },
       methods: {
         // Agregar una nueva tarea a la lista
+        // modifico add task para que cumpla con su tarea y limpie el input
         addTask() {
           if (this.newTask.trim() !== "") {
             this.tasks.push({ name: this.newTask, completed: false });
+            this.newTask = ""; // Limpiar input después de agregar
           }
         },
         // Marcar una tarea como completada
+        // agrero funcionalidad para que marque correctamente
         markComplete(index) {
+          this.tasks[index].completed = true;
         },
       },
       computed: {
         // Filtrar tareas según el estado del checkbox
         filteredTasks() {
-          return;
+          return this.tasks.filter(task => this.showCompleted || !task.completed);
         },
       }
     });
   </script>
 </body>
+
 </html>
