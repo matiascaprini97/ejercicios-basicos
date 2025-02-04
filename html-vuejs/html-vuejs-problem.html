@@ -1,0 +1,82 @@
+<!-- 
+Enunciado:
+---------
+Agregar el código de VueJS faltante tanto en la sección HTML con id="app" como en la sección Script para que se cumplan las siguientes funcionalidades:
+
+1. Agregar tareas con el botón "Add Task".
+2. Marcar tareas como completadas usando el botón "Mark Complete".
+3. Usar el checkbox para mostrar/ocultar las tareas completadas
+
+Observación: se adjuntan 2 imágenes con el comportamiento visual esperado. 
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue.js Exercise</title>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+</head>
+<body>
+  <div id="app">
+    <h1>Task List</h1>
+    
+    <!-- Input para escribir el nombre de la tarea -->
+    <input 
+      type="text" 
+      placeholder="Enter a task" 
+    />
+
+    <!-- Botón para agregar tarea -->
+    <button>Add Task</button>
+    
+    <br><br>
+
+    <!-- Checkbox para mostrar/ocultar tareas completadas -->
+    <label>
+      <input 
+        type="checkbox" 
+      />
+      Show Completed Tasks
+    </label>
+
+    <ul>
+      <!-- Mostrar lista de tareas -->
+      <li v-for="(task, index) in filteredTasks" :key="index">
+        <span>{{ task.name }}</span>
+        <button v-on:click="markComplete(index)">Mark Complete</button>
+        <span style="color: green;">✔ Completed</span>
+      </li>
+    </ul>
+  </div>
+
+  <script>
+    new Vue({
+      el: "#app",
+      data: {
+        newTask: "",         
+        tasks: [],           
+        showCompleted: true, 
+      },
+      methods: {
+        // Agregar una nueva tarea a la lista
+        addTask() {
+          if (this.newTask.trim() !== "") {
+            this.tasks.push({ name: this.newTask, completed: false });
+          }
+        },
+        // Marcar una tarea como completada
+        markComplete(index) {
+        },
+      },
+      computed: {
+        // Filtrar tareas según el estado del checkbox
+        filteredTasks() {
+          return;
+        },
+      }
+    });
+  </script>
+</body>
+</html>
