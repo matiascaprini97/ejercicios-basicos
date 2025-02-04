@@ -59,3 +59,17 @@
 
 
 -- *** Inserta tu consulta aquí ***
+SELECT 
+    h.invoice_id,
+    h.customer_name,
+    h.invoice_date,
+    COALESCE(SUM(d.unit_price_pesos * d.quantity) / er.usd_to_peso_rate, 0) AS total_usd
+FROM invoice_header h
+LEFT JOIN invoice_details d ON h.invoice_id = d.invoice_id
+LEFT JOIN exchange_rate er 
+    ON er.exchange_date = (
+        SELECT MAX(exchange_date) 
+        FROM exchange_rate 
+        WHERE exchange_date <= h.invoice_date
+    )
+GROUP BY h.invoice_id, h.customer_name, h.invoice_date, er.usd_to_peso_rate;
